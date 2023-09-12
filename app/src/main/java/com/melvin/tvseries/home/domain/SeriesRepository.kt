@@ -1,7 +1,8 @@
 package com.melvin.tvseries.home.domain
 
-import com.melvin.tvseries.core.data.Resource
+import androidx.paging.PagingData
+import kotlinx.coroutines.flow.Flow
 
 interface SeriesRepository {
-    suspend fun getSeries(nextPage: Int = 0): Resource<List<Series>>
+    suspend fun getSeries(): Flow<PagingData<Series>>
 }

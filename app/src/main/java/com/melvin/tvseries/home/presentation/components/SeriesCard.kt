@@ -31,7 +31,8 @@ fun SeriesCard(
 ) {
     Card(
         modifier = modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable { onClick() },
         shape = CardDefaults.elevatedShape,
         elevation = CardDefaults.cardElevation()
     ) {
@@ -41,8 +42,7 @@ fun SeriesCard(
             ) {
             AsyncImage(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { onClick() },
+                    .fillMaxWidth(),
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(image)
                     .crossfade(true)

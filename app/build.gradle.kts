@@ -74,6 +74,11 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("io.coil-kt:coil-compose:2.4.0")
 
+    //Pagination
+    implementation("androidx.paging:paging-runtime-ktx:3.2.1")
+    implementation("androidx.paging:paging-compose:3.2.1")
+
+
     // Hilt
     implementation("com.google.dagger:hilt-android:2.46.1")
     kapt("com.google.dagger:hilt-compiler:2.46.1")

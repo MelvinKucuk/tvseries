@@ -5,35 +5,26 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.melvin.tvseries.core.data.Resource
+import androidx.paging.cachedIn
 import com.melvin.tvseries.home.domain.SeriesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val repository: SeriesRepository
-): ViewModel() {
+) : ViewModel() {
 
     var state by mutableStateOf(HomeState())
         private set
 
     init {
         viewModelScope.launch {
-            state = when (val result = repository.getSeries()) {
-                is Resource.Success -> {
-                    state.copy(
-                        series = result.data
-                    )
-                }
-
-                is Resource.Error -> {
-                    state.copy(
-                        errorMessage = result.errorMessage
-                    )
-                }
-            }
+            state = state.copy(
+                series = repository.getSeries().distinctUntilChanged().cachedIn(viewModelScope)
+            )
         }
     }
 
@@ -45,6 +36,14 @@ class HomeViewModel @Inject constructor(
 
             HomeEvent.ErrorShown -> {
                 state = state.copy(errorMessage = null)
+            }
+
+            HomeEvent.OnLastItemReached -> {
+
+            }
+
+            is HomeEvent.ShowError -> {
+                state = state.copy(errorMessage = event.errorMessage)
             }
         }
     }

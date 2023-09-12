@@ -8,5 +8,5 @@ import retrofit2.http.Query
 interface SeriesService {
 
     @GET("shows")
-    suspend fun getSeries(@Query("page") nextPage: Int): Response<List<SeriesDto>>
+    suspend fun getSeries(@Query("page") page: Int): Response<List<SeriesDto>>
 }
