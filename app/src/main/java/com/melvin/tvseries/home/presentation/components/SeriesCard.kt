@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -39,7 +40,7 @@ fun SeriesCard(
         Column(
             modifier = modifier,
             horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+        ) {
             AsyncImage(
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -68,7 +69,8 @@ fun SeriesCard(
 @Composable
 fun SeriesCardPreview() {
     SeriesCard(
-        "Constantine",
-        "https://static.tvmaze.com/uploads/images/original_untouched/0/184.jpg"
+        modifier = Modifier.size(width = 50.dp, height = 90.dp),
+        title = "Constantine",
+        image = "https://static.tvmaze.com/uploads/images/original_untouched/0/184.jpg"
     ) {}
 }
