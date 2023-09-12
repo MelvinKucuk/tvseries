@@ -1,4 +1,4 @@
-package com.melvin.tvseries.home.presentation
+package com.melvin.tvseries.home.presentation.list
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,9 +16,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.melvin.tvseries.core.presentaiton.components.SearchBar
 import com.melvin.tvseries.home.presentation.components.SeriesCard
-import com.melvin.tvseries.home.presentation.viewmodel.HomeEvent
-import com.melvin.tvseries.home.presentation.viewmodel.HomeState
+import com.melvin.tvseries.home.presentation.list.viewmodel.HomeEvent
+import com.melvin.tvseries.home.presentation.list.viewmodel.HomeState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -26,7 +27,13 @@ fun HomeScreen(
     state: HomeState,
     onEvent: (HomeEvent) -> Unit
 ) {
-    Scaffold { paddingValues ->
+    Scaffold(
+        topBar = {
+            SearchBar {
+                onEvent(HomeEvent.OnSearchClicked)
+            }
+        }
+    ) { paddingValues ->
         val series = state.series.collectAsLazyPagingItems()
         LazyVerticalGrid(
             columns = GridCells.Fixed(3),

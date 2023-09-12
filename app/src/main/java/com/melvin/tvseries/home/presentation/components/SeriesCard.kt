@@ -3,6 +3,7 @@ package com.melvin.tvseries.home.presentation.components
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
@@ -43,6 +44,7 @@ fun SeriesCard(
         ) {
             AsyncImage(
                 modifier = Modifier
+                    .height(200.dp)
                     .fillMaxWidth(),
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(image)
@@ -50,6 +52,7 @@ fun SeriesCard(
                     .build(),
                 contentDescription = stringResource(R.string.image),
                 placeholder = painterResource(R.drawable.placeholder),
+                error = painterResource(R.drawable.placeholder),
                 contentScale = ContentScale.Crop,
             )
 

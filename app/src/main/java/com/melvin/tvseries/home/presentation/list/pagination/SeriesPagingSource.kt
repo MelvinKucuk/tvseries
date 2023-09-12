@@ -1,4 +1,4 @@
-package com.melvin.tvseries.home.presentation.pagination
+package com.melvin.tvseries.home.presentation.list.pagination
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState

@@ -1,4 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ExtraTranslation">
     <string name="app_name">tvseries</string>
     <string name="image" >image</string>
+    <string name="tv_series">TV Series</string>
+    <string name="search">search</string>
+    <string name="search_series_by_name">Search series by name</string>
 </resources>

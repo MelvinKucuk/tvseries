@@ -1,4 +1,4 @@
-package com.melvin.tvseries.home.presentation.viewmodel
+package com.melvin.tvseries.home.presentation.list.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,21 +29,25 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onEvent(event: HomeEvent) {
-        when (event) {
+        state = when (event) {
             is HomeEvent.OnSeriesClicked -> {
-                // TODO
+                state.copy()
             }
 
             HomeEvent.ErrorShown -> {
-                state = state.copy(errorMessage = null)
-            }
-
-            HomeEvent.OnLastItemReached -> {
-
+                state.copy(errorMessage = null)
             }
 
             is HomeEvent.ShowError -> {
-                state = state.copy(errorMessage = event.errorMessage)
+                state.copy(errorMessage = event.errorMessage)
+            }
+
+            HomeEvent.SearchNavigated -> {
+                state.copy(navigateToSearch = null)
+            }
+
+            HomeEvent.OnSearchClicked -> {
+                state.copy(navigateToSearch = true)
             }
         }
     }
