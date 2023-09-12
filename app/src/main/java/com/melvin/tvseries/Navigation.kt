@@ -1,17 +1,17 @@
 package com.melvin.tvseries
 
-import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.melvin.tvseries.core.util.ObserveError
 import com.melvin.tvseries.home.presentation.list.HomeScreen
 import com.melvin.tvseries.home.presentation.list.viewmodel.HomeEvent
 import com.melvin.tvseries.home.presentation.list.viewmodel.HomeViewModel
 import com.melvin.tvseries.home.presentation.search.SearchScreen
+import com.melvin.tvseries.home.presentation.search.viewmodel.SearchEvent
 import com.melvin.tvseries.home.presentation.search.viewmodel.SearchViewModel
 
 @Composable
@@ -21,16 +21,11 @@ fun Navigation(
     NavHost(navController = navController, startDestination = Routes.HomeScreen.route) {
 
         composable(Routes.HomeScreen.route) {
-            val context = LocalContext.current
             val viewModel: HomeViewModel = hiltViewModel()
 
             with(viewModel.state) {
-                LaunchedEffect(errorMessage) {
-                    val errorMessage = errorMessage
-                    if (errorMessage != null) {
-                        Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
-                        viewModel.onEvent(HomeEvent.ErrorShown)
-                    }
+                ObserveError(errorMessage) {
+                    viewModel.onEvent(HomeEvent.ErrorShown)
                 }
 
                 LaunchedEffect(navigateToSearch) {
@@ -46,6 +41,12 @@ fun Navigation(
 
         composable(Routes.SearchScreen.route) {
             val viewModel: SearchViewModel = hiltViewModel()
+
+            with(viewModel.state) {
+                ObserveError(errorMessage) {
+                    viewModel.onEvent(SearchEvent.ErrorShown)
+                }
+            }
 
             SearchScreen(state = viewModel.state, onEvent = viewModel::onEvent)
         }

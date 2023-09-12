@@ -45,11 +45,16 @@ class SearchViewModel @Inject constructor(
 
                         is Resource.Error -> {
                             state.copy(
+                                errorMessage = result.errorMessage,
                                 isLoading = false
                             )
                         }
                     }
                 }
+            }
+
+            SearchEvent.ErrorShown -> {
+                state = state.copy(errorMessage = null)
             }
         }
     }
