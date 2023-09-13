@@ -1,6 +1,5 @@
 package com.melvin.tvseries.home.presentation.search
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,7 +20,6 @@ import com.melvin.tvseries.home.presentation.components.SeriesCard
 import com.melvin.tvseries.home.presentation.search.viewmodel.SearchEvent
 import com.melvin.tvseries.home.presentation.search.viewmodel.SearchState
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SearchScreen(
     state: SearchState,
@@ -40,10 +38,10 @@ fun SearchScreen(
             ) {
                 items(state.series) { series ->
                     SeriesCard(
-                        title = series.name ?: "",
-                        image = series.image?.medium ?: ""
+                        title = series.name,
+                        image = series.image.medium
                     ) {
-                        //onEvent(HomeEvent.OnSeriesClicked(series[index]))
+                        onEvent(SearchEvent.NavigateToSeriesDetail(series.id))
                     }
                 }
             }

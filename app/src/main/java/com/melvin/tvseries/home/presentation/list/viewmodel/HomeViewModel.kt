@@ -31,7 +31,9 @@ class HomeViewModel @Inject constructor(
     fun onEvent(event: HomeEvent) {
         state = when (event) {
             is HomeEvent.OnSeriesClicked -> {
-                state.copy()
+                event.seriesId?.let {
+                    state.copy(uiEvent = HomeUiEvent.NavigateToSeriesDetail(it))
+                } ?: state.copy()
             }
 
             HomeEvent.ErrorShown -> {
@@ -42,12 +44,12 @@ class HomeViewModel @Inject constructor(
                 state.copy(errorMessage = event.errorMessage)
             }
 
-            HomeEvent.SearchNavigated -> {
-                state.copy(navigateToSearch = null)
+            HomeEvent.UiEventHandled -> {
+                state.copy(uiEvent = null)
             }
 
             HomeEvent.OnSearchClicked -> {
-                state.copy(navigateToSearch = true)
+                state.copy(uiEvent = HomeUiEvent.NavigateToSearch)
             }
         }
     }

@@ -10,11 +10,12 @@ import com.melvin.tvseries.home.domain.Series
 import com.melvin.tvseries.home.domain.SeriesRepository
 import com.melvin.tvseries.home.presentation.list.pagination.SeriesPagingSource
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.supervisorScope
 import javax.inject.Inject
 
 class SeriesRepositoryImpl @Inject constructor(
     private val service: SeriesService
-): SeriesRepository {
+) : SeriesRepository {
 
     override suspend fun getSeries(): Flow<PagingData<Series>> {
         return Pager(
@@ -36,7 +37,36 @@ class SeriesRepositoryImpl @Inject constructor(
             is Resource.Success -> {
                 Resource.Success(result.data.map { it.series }.map { it.toDomain() })
             }
+
             is Resource.Error -> Resource.Error(result.errorMessage)
+        }
+    }
+
+    override suspend fun getSeriesById(seriesId: Int, onResult: (Resource<Series>) -> Unit) {
+        supervisorScope {
+            val series = safeApiCall {
+                service.getSeriesById(seriesId)
+            }
+
+            val seasons = safeApiCall {
+                service.getSeasonsBySeriesId(seriesId)
+            }
+
+            onResult(
+                when (series) {
+                    is Resource.Success -> {
+                        when (seasons) {
+                            is Resource.Success -> Resource.Success(series.data.toDomain().copy(
+                                seasons = seasons.data.map { it.toDomain() }
+                            ))
+
+                            is Resource.Error -> Resource.Error(seasons.errorMessage)
+                        }
+                    }
+
+                    is Resource.Error -> Resource.Error(series.errorMessage)
+                }
+            )
         }
     }
 }

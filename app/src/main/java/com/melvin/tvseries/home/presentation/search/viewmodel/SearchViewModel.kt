@@ -56,6 +56,14 @@ class SearchViewModel @Inject constructor(
             SearchEvent.ErrorShown -> {
                 state = state.copy(errorMessage = null)
             }
+
+            is SearchEvent.NavigateToSeriesDetail -> {
+                event.seriesId?.let {
+                    state = state.copy(uiEvent = SearchUiEvent.NavigateToSeriesDetail(it))
+                }
+            }
+
+            SearchEvent.UiEventHandled -> state = state.copy(uiEvent = null)
         }
     }
 

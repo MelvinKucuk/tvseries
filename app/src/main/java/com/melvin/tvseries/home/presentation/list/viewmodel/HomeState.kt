@@ -8,5 +8,5 @@ import kotlinx.coroutines.flow.flowOf
 data class HomeState(
     val series: Flow<PagingData<Series>> = flowOf(),
     val errorMessage: String? = null,
-    val navigateToSearch: Boolean? = null
+    val uiEvent: HomeUiEvent? = null
 )

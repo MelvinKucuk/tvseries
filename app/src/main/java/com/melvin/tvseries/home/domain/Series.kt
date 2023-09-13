@@ -1,20 +1,21 @@
 package com.melvin.tvseries.home.domain
 
 data class Series(
-    var id: Int? = null,
-    var name: String? = null,
-    var genres: List<String?> = listOf(),
-    var schedule: Schedule? = Schedule(),
-    var image: Image? = Image(),
-    var summary: String? = null,
+    val id: Int = 0,
+    val name: String = "",
+    val genres: List<String> = listOf(),
+    val schedule: Schedule = Schedule(),
+    val image: Image = Image(),
+    val summary: String = "",
+    val seasons: List<Season> = listOf()
 )
 
 data class Image(
-    var medium: String? = null,
-    var original: String? = null
+    val medium: String = "",
+    val original: String = ""
 )
 
 data class Schedule(
-    var time: String? = null,
-    var days: List<String?> = listOf()
+    val time: String = "",
+    val days: List<String> = listOf()
 )
