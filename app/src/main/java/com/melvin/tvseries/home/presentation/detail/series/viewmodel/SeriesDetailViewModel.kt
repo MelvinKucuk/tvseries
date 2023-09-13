@@ -32,6 +32,7 @@ class SeriesDetailViewModel @Inject constructor(
                     when (val result = it) {
                         is Resource.Success -> with(result.data) {
                             state = state.copy(
+                                id = seriesId,
                                 name = name,
                                 image = image.original,
                                 genres = genres,
@@ -51,7 +52,13 @@ class SeriesDetailViewModel @Inject constructor(
     fun onEvent(event: SeriesDetailEvent) {
         state = when (event) {
             is SeriesDetailEvent.OnEpisodeClick -> {
-                state.copy()
+                state.copy(
+                    uiEvent = SeriesDetailUiEvent.NavigateToEpisodeDetail(
+                        seriesId = state.id,
+                        seasonNumber = event.seasonNumber,
+                        episodeNumber = event.episodeNumber
+                    )
+                )
             }
 
             SeriesDetailEvent.OnUiEventHandled -> {

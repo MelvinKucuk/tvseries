@@ -1,5 +1,6 @@
 package com.melvin.tvseries.home.data
 
+import com.melvin.tvseries.home.data.model.EpisodeDto
 import com.melvin.tvseries.home.data.model.SearchResponse
 import com.melvin.tvseries.home.data.model.SeasonDto
 import com.melvin.tvseries.home.data.model.SeriesDto
@@ -21,4 +22,11 @@ interface SeriesService {
 
     @GET("shows/{seriesId}/seasons")
     suspend fun getSeasonsBySeriesId(@Path("seriesId") seriesId: Int): Response<List<SeasonDto>>
+
+    @GET("shows/{seriesId}/episodebynumber")
+    suspend fun getEpisode(
+        @Path("seriesId") seriesId: Int,
+        @Query("season") seasonNumber: Int,
+        @Query("number") episodeNumber: Int,
+    ): Response<EpisodeDto>
 }

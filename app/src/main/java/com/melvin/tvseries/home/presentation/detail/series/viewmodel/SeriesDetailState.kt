@@ -4,6 +4,7 @@ import com.melvin.tvseries.home.domain.Schedule
 import com.melvin.tvseries.home.domain.Season
 
 data class SeriesDetailState(
+    val id: Int = 0,
     val name: String = "",
     val image: String = "",
     val genres: List<String> = listOf(),

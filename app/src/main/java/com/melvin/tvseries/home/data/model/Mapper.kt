@@ -1,5 +1,6 @@
 package com.melvin.tvseries.home.data.model
 
+import com.melvin.tvseries.home.domain.Episode
 import com.melvin.tvseries.home.domain.Image
 import com.melvin.tvseries.home.domain.Schedule
 import com.melvin.tvseries.home.domain.Season
@@ -31,4 +32,13 @@ fun SeasonDto.toDomain() =
     Season(
         number = number ?: 0,
         episodeCount = episodeCount ?: 0
+    )
+
+fun EpisodeDto.toDomain() =
+    Episode(
+        name = name ?: "",
+        summary = summary ?: "",
+        image = image.toDomain().original,
+        seasonNumber = season ?: 0,
+        episodeNumber = episode ?: 0,
     )

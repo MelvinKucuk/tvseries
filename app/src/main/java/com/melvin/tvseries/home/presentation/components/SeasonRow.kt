@@ -39,7 +39,7 @@ fun SeasonRow(
         Spacer(modifier = Modifier.size(12.dp))
 
         LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(episodeCount) {
                 Box(

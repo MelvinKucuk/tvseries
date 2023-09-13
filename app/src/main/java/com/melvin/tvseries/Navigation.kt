@@ -10,7 +10,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.melvin.tvseries.core.util.makeToast
+import com.melvin.tvseries.home.presentation.detail.episode.EpisodeDetailScreen
+import com.melvin.tvseries.home.presentation.detail.episode.viewmodel.EpisodeDetailEvent
+import com.melvin.tvseries.home.presentation.detail.episode.viewmodel.EpisodeDetailUiEvent
+import com.melvin.tvseries.home.presentation.detail.episode.viewmodel.EpisodeDetailViewModel
 import com.melvin.tvseries.home.presentation.detail.series.SeriesDetailScreen
+import com.melvin.tvseries.home.presentation.detail.series.viewmodel.SeriesDetailEvent
 import com.melvin.tvseries.home.presentation.detail.series.viewmodel.SeriesDetailUiEvent
 import com.melvin.tvseries.home.presentation.detail.series.viewmodel.SeriesDetailViewModel
 import com.melvin.tvseries.home.presentation.list.HomeScreen
@@ -38,6 +43,7 @@ fun Navigation(
                         when (uiEvent) {
                             HomeUiEvent.NavigateToSearch ->
                                 navController.navigate(Routes.SearchScreen.route)
+
                             is HomeUiEvent.NavigateToSeriesDetail ->
                                 navController.navigate(
                                     Routes.SeriesDetailScreen.getDestination(uiEvent.seriesId)
@@ -93,13 +99,60 @@ fun Navigation(
                     if (uiEvent != null) {
                         when (uiEvent) {
                             SeriesDetailUiEvent.NavigateBack -> navController.popBackStack()
-                            is SeriesDetailUiEvent.ShowError -> makeToast(context, uiEvent.errorMessage)
+                            is SeriesDetailUiEvent.ShowError -> makeToast(
+                                context,
+                                uiEvent.errorMessage
+                            )
+
+                            is SeriesDetailUiEvent.NavigateToEpisodeDetail -> {
+                                navController.navigate(
+                                    Routes.EpisodeDetailScreen.getDestination(
+                                        seriesId = uiEvent.seriesId,
+                                        seasonNumber = uiEvent.seasonNumber,
+                                        episodeNumber = uiEvent.episodeNumber
+                                    )
+                                )
+                            }
                         }
                     }
+                    viewModel.onEvent(SeriesDetailEvent.OnUiEventHandled)
                 }
             }
 
             SeriesDetailScreen(state = viewModel.state, onEvent = viewModel::onEvent)
+        }
+
+        composable(
+            route = Routes.EpisodeDetailScreen.getCompleteRoute(),
+            arguments = listOf(
+                navArgument(Routes.EpisodeDetailScreen.SERIES_ID) {
+                    type = NavType.IntType
+                },
+                navArgument(Routes.EpisodeDetailScreen.EPISODE_NUMBER) {
+                    type = NavType.IntType
+                },
+                navArgument(Routes.EpisodeDetailScreen.SEASON_NUMBER) {
+                    type = NavType.IntType
+                }
+            )
+        ) {
+            val viewModel: EpisodeDetailViewModel = hiltViewModel()
+            val context = LocalContext.current
+
+            with(viewModel.state) {
+                LaunchedEffect(uiEvent) {
+                    if (uiEvent != null) {
+                        when (uiEvent) {
+                            EpisodeDetailUiEvent.NavigateBack -> navController.popBackStack()
+                            is EpisodeDetailUiEvent.ShowError ->
+                                makeToast(context, uiEvent.errorMessage)
+                        }
+                        viewModel.onEvent(EpisodeDetailEvent.OnBackClicked)
+                    }
+                }
+            }
+
+            EpisodeDetailScreen(state = viewModel.state, onEvent = viewModel::onEvent)
         }
     }
 }

@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -33,7 +32,6 @@ fun SeriesDetailScreen(
     Surface(modifier = Modifier.fillMaxSize()) {
         Column {
             IconButton(
-                modifier = Modifier.padding(start = 24.dp),
                 onClick = {
                     onEvent(SeriesDetailEvent.OnBackClicked)
                 }
@@ -76,7 +74,12 @@ fun SeriesDetailScreen(
                         seasonNumber = it.number,
                         episodeCount = it.episodeCount
                     ) { seasonNumber, episodeNumber ->
-
+                        onEvent(
+                            SeriesDetailEvent.OnEpisodeClick(
+                                episodeNumber = episodeNumber,
+                                seasonNumber = seasonNumber
+                            )
+                        )
                     }
                 }
             }

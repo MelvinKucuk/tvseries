@@ -6,6 +6,7 @@ import androidx.paging.PagingData
 import com.melvin.tvseries.core.data.Resource
 import com.melvin.tvseries.core.data.safeApiCall
 import com.melvin.tvseries.home.data.model.toDomain
+import com.melvin.tvseries.home.domain.Episode
 import com.melvin.tvseries.home.domain.Series
 import com.melvin.tvseries.home.domain.SeriesRepository
 import com.melvin.tvseries.home.presentation.list.pagination.SeriesPagingSource
@@ -67,6 +68,25 @@ class SeriesRepositoryImpl @Inject constructor(
                     is Resource.Error -> Resource.Error(series.errorMessage)
                 }
             )
+        }
+    }
+
+    override suspend fun getEpisode(
+        seriesId: Int,
+        seasonNumber: Int,
+        episodeNumber: Int
+    ): Resource<Episode> {
+        val result = safeApiCall {
+            service.getEpisode(
+                seriesId = seriesId,
+                seasonNumber = seasonNumber,
+                episodeNumber = episodeNumber
+            )
+        }
+
+        return when (result) {
+            is Resource.Success -> Resource.Success(result.data.toDomain())
+            is Resource.Error -> Resource.Error(result.errorMessage)
         }
     }
 }
