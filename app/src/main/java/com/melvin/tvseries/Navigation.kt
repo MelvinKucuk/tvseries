@@ -9,6 +9,10 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.melvin.tvseries.authentication.presentation.PinScreen
+import com.melvin.tvseries.authentication.presentation.viewmodel.PinEvent
+import com.melvin.tvseries.authentication.presentation.viewmodel.PinUiEvent
+import com.melvin.tvseries.authentication.presentation.viewmodel.PinViewModel
 import com.melvin.tvseries.core.util.makeToast
 import com.melvin.tvseries.home.presentation.detail.episode.EpisodeDetailScreen
 import com.melvin.tvseries.home.presentation.detail.episode.viewmodel.EpisodeDetailEvent
@@ -29,9 +33,10 @@ import com.melvin.tvseries.home.presentation.search.viewmodel.SearchViewModel
 
 @Composable
 fun Navigation(
-    navController: NavHostController
+    navController: NavHostController,
+    startDestination: String
 ) {
-    NavHost(navController = navController, startDestination = Routes.HomeScreen.route) {
+    NavHost(navController = navController, startDestination = startDestination) {
 
         composable(Routes.HomeScreen.route) {
             val viewModel: HomeViewModel = hiltViewModel()
@@ -50,6 +55,8 @@ fun Navigation(
                                 )
 
                             is HomeUiEvent.ShowError -> makeToast(context, uiEvent.errorMessage)
+                            HomeUiEvent.NavigateToPin ->
+                                navController.navigate(Routes.PinScreen.route)
                         }
                         viewModel.onEvent(HomeEvent.UiEventHandled)
                     }
@@ -153,6 +160,32 @@ fun Navigation(
             }
 
             EpisodeDetailScreen(state = viewModel.state, onEvent = viewModel::onEvent)
+        }
+
+        composable(Routes.PinScreen.route) {
+            val viewModel: PinViewModel = hiltViewModel()
+            val context = LocalContext.current
+
+            with(viewModel.state) {
+                LaunchedEffect(uiEvent) {
+                    if (uiEvent != null) {
+                        when (uiEvent) {
+                            PinUiEvent.NavigateBack -> navController.popBackStack()
+                            PinUiEvent.NavigateHome ->
+                                navController.navigate(Routes.HomeScreen.route) {
+                                    popUpTo(Routes.PinScreen.route) {
+                                        inclusive = true
+                                    }
+                                }
+
+                            PinUiEvent.ShowInvalidPin -> makeToast(context, "Invalid pin")
+                        }
+                        viewModel.onEvent(PinEvent.OnUiEventHandled)
+                    }
+                }
+            }
+
+            PinScreen(state = viewModel.state, onEvent = viewModel::onEvent)
         }
     }
 }

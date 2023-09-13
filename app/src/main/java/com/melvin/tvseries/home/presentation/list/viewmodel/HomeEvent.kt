@@ -6,4 +6,5 @@ sealed class HomeEvent {
     data class ShowError(val errorMessage: String): HomeEvent()
     object OnSearchClicked: HomeEvent()
     object UiEventHandled: HomeEvent()
+    object OnLockClicked: HomeEvent()
 }

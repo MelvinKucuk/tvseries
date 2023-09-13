@@ -50,4 +50,11 @@ class HomeViewModelTest {
 
         assertEquals(HomeUiEvent.ShowError("error"), viewModel.state.uiEvent)
     }
+
+    @Test
+    fun `validate event OnLockClicked`() {
+        viewModel.onEvent(HomeEvent.OnLockClicked)
+
+        assertEquals(HomeUiEvent.NavigateToPin, viewModel.state.uiEvent)
+    }
 }

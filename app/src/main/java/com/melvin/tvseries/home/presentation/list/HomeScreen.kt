@@ -30,9 +30,14 @@ fun HomeScreen(
 ) {
     Scaffold(
         topBar = {
-            SearchBar {
-                onEvent(HomeEvent.OnSearchClicked)
-            }
+            SearchBar(
+                onSearchClick = {
+                    onEvent(HomeEvent.OnSearchClicked)
+                },
+                onLockClick = {
+                    onEvent(HomeEvent.OnLockClicked)
+                }
+            )
         }
     ) { paddingValues ->
         Box {

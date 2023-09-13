@@ -47,6 +47,10 @@ class HomeViewModel @Inject constructor(
             HomeEvent.OnSearchClicked -> {
                 state.copy(uiEvent = HomeUiEvent.NavigateToSearch)
             }
+
+            HomeEvent.OnLockClicked -> {
+                state.copy(uiEvent = HomeUiEvent.NavigateToPin)
+            }
         }
     }
 }

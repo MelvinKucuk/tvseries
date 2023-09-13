@@ -5,4 +5,8 @@
     <string name="search">search</string>
     <string name="search_series_by_name">Search series by name</string>
     <string name="back">back</string>
+    <string name="security">security</string>
+    <string name="set_up_4_digit_pin">Set up 4 digit PIN</string>
+    <string name="save">Save</string>
+    <string name="accept">Accept</string>
 </resources>
