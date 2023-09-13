@@ -49,17 +49,21 @@ class SeriesDetailViewModel @Inject constructor(
     }
 
     fun onEvent(event: SeriesDetailEvent) {
-        when (event) {
+        state = when (event) {
             is SeriesDetailEvent.OnEpisodeClick -> {
-
+                state.copy()
             }
 
-            SeriesDetailEvent.OnEpisodeNavigated -> {
-
+            SeriesDetailEvent.OnUiEventHandled -> {
+                state.copy(uiEvent = null)
             }
 
             is SeriesDetailEvent.ShowError ->
-                state = state.copy(uiEvent = SeriesDetailUiEvent.ShowError(event.errorMessage))
+                state.copy(uiEvent = SeriesDetailUiEvent.ShowError(event.errorMessage))
+
+            SeriesDetailEvent.OnBackClicked -> {
+                state.copy(uiEvent = SeriesDetailUiEvent.NavigateBack)
+            }
         }
     }
 }

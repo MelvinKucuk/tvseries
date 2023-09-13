@@ -27,9 +27,15 @@ fun SearchScreen(
 ) {
     Surface(modifier = Modifier.fillMaxSize()) {
         Column {
-            SearchComponent(text = state.text) {
-                onEvent(SearchEvent.OnTextChanged(it))
-            }
+            SearchComponent(
+                text = state.text,
+                onTextChange = {
+                    onEvent(SearchEvent.OnTextChanged(it))
+                },
+                onBackClick = {
+                    onEvent(SearchEvent.OnBackClicked)
+                }
+            )
             LazyVerticalGrid(
                 columns = GridCells.Fixed(3),
                 contentPadding = PaddingValues(12.dp),

@@ -6,6 +6,5 @@ data class SearchState(
     val text: String = "",
     val series: List<Series> = listOf(),
     val isLoading: Boolean = false,
-    val errorMessage: String? = null,
     val uiEvent: SearchUiEvent? = null
 )

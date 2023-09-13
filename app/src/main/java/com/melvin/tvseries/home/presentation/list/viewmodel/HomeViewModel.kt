@@ -36,12 +36,8 @@ class HomeViewModel @Inject constructor(
                 } ?: state.copy()
             }
 
-            HomeEvent.ErrorShown -> {
-                state.copy(errorMessage = null)
-            }
-
             is HomeEvent.ShowError -> {
-                state.copy(errorMessage = event.errorMessage)
+                state.copy(uiEvent = HomeUiEvent.ShowError(event.errorMessage))
             }
 
             HomeEvent.UiEventHandled -> {

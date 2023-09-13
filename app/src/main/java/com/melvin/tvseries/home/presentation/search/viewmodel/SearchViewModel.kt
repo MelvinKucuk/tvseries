@@ -45,16 +45,12 @@ class SearchViewModel @Inject constructor(
 
                         is Resource.Error -> {
                             state.copy(
-                                errorMessage = result.errorMessage,
+                                uiEvent = SearchUiEvent.ShowError(result.errorMessage),
                                 isLoading = false
                             )
                         }
                     }
                 }
-            }
-
-            SearchEvent.ErrorShown -> {
-                state = state.copy(errorMessage = null)
             }
 
             is SearchEvent.NavigateToSeriesDetail -> {
@@ -64,6 +60,7 @@ class SearchViewModel @Inject constructor(
             }
 
             SearchEvent.UiEventHandled -> state = state.copy(uiEvent = null)
+            SearchEvent.OnBackClicked -> state = state.copy(uiEvent = SearchUiEvent.NavigateBack)
         }
     }
 

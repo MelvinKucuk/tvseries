@@ -2,14 +2,16 @@ package com.melvin.tvseries
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.melvin.tvseries.core.util.ObserveError
+import com.melvin.tvseries.core.util.makeToast
 import com.melvin.tvseries.home.presentation.detail.series.SeriesDetailScreen
+import com.melvin.tvseries.home.presentation.detail.series.viewmodel.SeriesDetailUiEvent
 import com.melvin.tvseries.home.presentation.detail.series.viewmodel.SeriesDetailViewModel
 import com.melvin.tvseries.home.presentation.list.HomeScreen
 import com.melvin.tvseries.home.presentation.list.viewmodel.HomeEvent
@@ -28,12 +30,9 @@ fun Navigation(
 
         composable(Routes.HomeScreen.route) {
             val viewModel: HomeViewModel = hiltViewModel()
+            val context = LocalContext.current
 
             with(viewModel.state) {
-                ObserveError(errorMessage) {
-                    viewModel.onEvent(HomeEvent.ErrorShown)
-                }
-
                 LaunchedEffect(uiEvent) {
                     if (uiEvent != null) {
                         when (uiEvent) {
@@ -43,6 +42,8 @@ fun Navigation(
                                 navController.navigate(
                                     Routes.SeriesDetailScreen.getDestination(uiEvent.seriesId)
                                 )
+
+                            is HomeUiEvent.ShowError -> makeToast(context, uiEvent.errorMessage)
                         }
                         viewModel.onEvent(HomeEvent.UiEventHandled)
                     }
@@ -54,11 +55,9 @@ fun Navigation(
 
         composable(Routes.SearchScreen.route) {
             val viewModel: SearchViewModel = hiltViewModel()
+            val context = LocalContext.current
 
             with(viewModel.state) {
-                ObserveError(errorMessage) {
-                    viewModel.onEvent(SearchEvent.ErrorShown)
-                }
                 LaunchedEffect(uiEvent) {
                     if (uiEvent != null) {
                         when (uiEvent) {
@@ -66,6 +65,9 @@ fun Navigation(
                                 navController.navigate(
                                     Routes.SeriesDetailScreen.getDestination(uiEvent.seriesId)
                                 )
+
+                            SearchUiEvent.NavigateBack -> navController.popBackStack()
+                            is SearchUiEvent.ShowError -> makeToast(context, uiEvent.errorMessage)
                         }
                         viewModel.onEvent(SearchEvent.UiEventHandled)
                     }
@@ -84,6 +86,18 @@ fun Navigation(
             )
         ) {
             val viewModel: SeriesDetailViewModel = hiltViewModel()
+            val context = LocalContext.current
+
+            with(viewModel.state) {
+                LaunchedEffect(uiEvent) {
+                    if (uiEvent != null) {
+                        when (uiEvent) {
+                            SeriesDetailUiEvent.NavigateBack -> navController.popBackStack()
+                            is SeriesDetailUiEvent.ShowError -> makeToast(context, uiEvent.errorMessage)
+                        }
+                    }
+                }
+            }
 
             SeriesDetailScreen(state = viewModel.state, onEvent = viewModel::onEvent)
         }
